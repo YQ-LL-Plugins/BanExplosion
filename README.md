@@ -1,29 +1,72 @@
-# LiteLoaderBDS C++ Plugin Template
+# BanExplosion
 
-The template repository for LiteLoaderBDS C++ plugin development.
+> A LiteLoaderBDS plugin to custom and intercept explosions
 
 ## Usage
 
-* Write and build your plugin
+`/banexp on`:   Ban explosions in config file
 
-  Please refer to [LiteLoaderBDS C++ Plugin Development Documentation](https://cpp.docs.litebds.com/en/) or [LiteLoaderBDS C++ 插件开发文档](https://cpp.docs.litebds.com/zh-Hans/).
+`/banexp off`:  Unban explosions in config file
 
-* Edit README.md and LICENSE
+`/banexp reload`:  Reload config file
 
-  You ought not to keep the original README.md, for it contains instructions on how to build your own plugin, which might not fit your plugin repository. The README.md of your repository should contain instructions on how to build, install and use your plugin.
 
-  You don't necessarily want your repository to be open sourced under the Unlicense, so please choose your own license in place of the `LICENSE` file.
 
-## For Beta Developers
+## Config file
 
-If you would like to experience the latest features for plugins in beta versions of LiteLoaderBDS, you can switch the branch of the SDK to beta. Run the commands below under the plugin repository:
+At `plugins/BanExplosion/config.ini`, with comments in file
 
-```sh
-git submodule set-branch --branch beta SDK
-git submodule update --init --remote
+- `NoExplosion=1` means this type of explosion is banned directly
+- `NoExplosion=0`, but `NoDestroyBlock=1` means that this type of explosion will still occur and hurt entities in game, but will never destroy blocks and create fires
+
+```ini
+; TNT
+[minecraft:tnt]
+NoExplosion = 0
+NoDestroyBlock = 1
+
+; 爬行者
+[minecraft:creeper]
+NoExplosion = 0
+NoDestroyBlock = 1
+
+;末地水晶
+[minecraft:end_crystal]
+NoExplosion = 0
+NoDestroyBlock = 1
+
+; 恶魂火球
+[minecraft:fireball]
+NoExplosion = 0
+NoDestroyBlock = 0
+
+; TNT矿车
+[minecraft:tnt_minecart]
+NoExplosion = 0
+NoDestroyBlock = 1
+
+; 凋零爆炸与吃方块
+[minecraft:wither]
+NoExplosion = 0
+NoDestroyBlock = 0
+
+; 黑色凋零之首
+[minecraft:wither_skull]
+NoExplosion = 0
+NoDestroyBlock = 0
+
+; 蓝色凋零之首
+[minecraft:wither_skull_dangerous]
+NoExplosion = 0
+NoDestroyBlock = 0
+
+; 重生锚
+[minecraft:respawn_anchor]
+NoExplosion = 1
+
+; 床
+[minecraft:bed]
+NoExplosion = 0
+NoDestroyBlock = 0
 ```
 
-## License
-
-This repository is open source under the Unlicense.
-Please refer to [the license file](LICENSE) for further information.
