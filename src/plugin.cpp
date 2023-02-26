@@ -2,6 +2,7 @@
 #include <llapi/RegCommandAPI.h>
 #include <llapi/EventAPI.h>
 #include <string>
+#include <unordered_map>
 #include "SimpleIni.h"
 #include "version.h"
 
@@ -9,12 +10,14 @@ using namespace RegisterCommandHelper;
 using namespace std;
 
 #define _CONF_PATH "plugins/BanExplosion/config.ini"
+const unordered_map<string, string> _TYPE_NAMES_REMAP = {         // 名字重写
+    {"minecraft:ender_crystal", "minecraft:end_crystal"}
+};
+
 
 CSimpleIniA ini;
 extern Logger logger;
-
-// 防爆
-bool suspend = false;
+bool suspend = false;       // 暂停防爆
 
 bool ReloadIni()
 {
@@ -81,13 +84,8 @@ void PluginInit()
         return;
     }
 
-    Event::PlayerUseRespawnAnchorEvent::subscribe([](const Event::PlayerUseRespawnAnchorEvent &ev) {
-        if (!suspend && ini.GetBoolValue("minecraft:respawn_anchor", "NoExplosion"))
-            return false;
-        return true;
-    });
-
     Event::WitherBossDestroyEvent::subscribe([](const Event::WitherBossDestroyEvent &ev) {
+        // logger.debug("Witherboss destroy");
         if (!suspend && ini.GetBoolValue("minecraft:wither", "NoDestroyBlock"))
             return false;
         return true;
@@ -97,6 +95,14 @@ void PluginInit()
         if (suspend)
             return true;
         string name = ev.mActor->getTypeName();
+
+        // check is renamed
+        auto res = _TYPE_NAMES_REMAP.find(name);
+        if(res != _TYPE_NAMES_REMAP.end())
+            name = res->second;
+
+        // logger.debug("Entity explode:" + name);
+
         if (ini.GetBoolValue(name.c_str(), "NoExplosion"))
             return false;
         if (ini.GetBoolValue(name.c_str(), "NoDestroyBlock"))
@@ -108,6 +114,7 @@ void PluginInit()
         if (suspend)
             return true;
         string name = ev.mBlockInstance.getBlock()->getTypeName();
+        // logger.debug("Block explode:" + name);
 
         /*if (ini.GetBoolValue(name.c_str(), "NoExplosion"))
             return false;
@@ -124,6 +131,7 @@ void PluginInit()
     Event::PlayerUseRespawnAnchorEvent::subscribe([](const Event::PlayerUseRespawnAnchorEvent& ev) {
         if (suspend)
             return true;
+        // logger.debug("Player use respawn anchor");
         if (ini.GetBoolValue("minecraft:respawn_anchor", "NoExplosion"))
             return false;
         else
