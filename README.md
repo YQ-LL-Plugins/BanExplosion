@@ -2,6 +2,12 @@
 
 > A LiteLoaderBDS plugin to custom and intercept explosions
 
+## Download
+
+[LL - BanExplosion | MineBBS](https://www.minebbs.com/resources/banexplosion.2798/)
+
+
+
 ## Usage
 
 `/banexp on`:   Ban explosions in config file
