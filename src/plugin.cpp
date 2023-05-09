@@ -113,7 +113,7 @@ void PluginInit()
     Event::BlockExplodeEvent::subscribe_ref([](Event::BlockExplodeEvent& ev) {
         if (suspend)
             return true;
-        string name = ev.mBlockInstance.getBlock()->getTypeName();
+        string name = ev.mBlockInstance.getBlock()->getName();
         // logger.debug("Block explode:" + name);
 
         /*if (ini.GetBoolValue(name.c_str(), "NoExplosion"))
